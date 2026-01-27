@@ -1,15 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
-from dotenv import load_dotenv
 
 from llama_index.core import StorageContext, load_index_from_storage
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.retrievers.bm25 import BM25Retriever
 from sentence_transformers import CrossEncoder
 
-from llm_client import stream_llm
+from rag_service.llm_client import stream_llm
 
-load_dotenv()
+
 
 app = FastAPI()
 

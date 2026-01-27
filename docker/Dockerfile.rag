@@ -3,22 +3,16 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Install backend dependencies
-COPY rag_service ./rag_service
-COPY .env /app/.env
-WORKDIR /app/rag_service
-
 COPY requirements.backend.txt .
 RUN pip install --no-cache-dir -r requirements.backend.txt
 
-# Copy backend code
+# Copy source code
 COPY rag_service ./rag_service
+COPY docs ./docs
 COPY db ./db
 
-WORKDIR /app/rag_service
-
 # Make start script executable
-RUN chmod +x start.sh
+RUN chmod +x rag_service/start.sh
 
-EXPOSE 8000
-
-CMD ["./start.sh"]
+# Start service
+CMD ["./rag_service/start.sh"]

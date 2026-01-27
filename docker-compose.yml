@@ -11,16 +11,17 @@ services:
       - .env
     ports:
       - "8000:8000"
+    volumes:
+      - ./db:/app/db
     restart: unless-stopped
 
   ui:
-    image: ucsm-ui
-    container_name: ucsm-ui
     build:
       context: .
       dockerfile: docker/Dockerfile.ui
+    image: ucsm-ui
+    container_name: ucsm-ui
     depends_on:
       - rag
     ports:
       - "8501:8501"
-    restart: unless-stopped
