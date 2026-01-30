@@ -13,6 +13,12 @@ import chromadb
 load_dotenv(override=True)
 
 # ----------------------------
+# Paths (Hugging Face Spaces persistent storage)
+# ----------------------------
+DB_DIR = os.environ.get("DB_DIR", "/data/db")
+os.makedirs(DB_DIR, exist_ok=True)
+
+# ----------------------------
 # Load Documents
 # ----------------------------
 documents = SimpleDirectoryReader("./docs").load_data()
@@ -27,9 +33,9 @@ embed_model = HuggingFaceEmbedding(
 # ----------------------------
 # Chroma Setup
 # ----------------------------
-chroma_client = chromadb.PersistentClient(path="./db")
+chroma_client = chromadb.PersistentClient(path=DB_DIR)
 
-collection_name = "dev_docs_collection"
+collection_name = os.environ.get("CHROMA_COLLECTION", "dev_docs_collection")
 
 try:
     chroma_collection = chroma_client.get_collection(collection_name)
@@ -50,6 +56,6 @@ index = VectorStoreIndex.from_documents(
 # ----------------------------
 # Persist Index
 # ----------------------------
-index.storage_context.persist(persist_dir="./db")
+index.storage_context.persist(persist_dir=DB_DIR)
 
-print("Documents indexed successfully with BGE embeddings")
+print(f"Documents indexed successfully with BGE embeddings. Persisted to: {DB_DIR}")

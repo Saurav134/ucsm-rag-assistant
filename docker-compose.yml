@@ -2,16 +2,11 @@ services:
   rag:
     image: ucsm-rag
     container_name: ucsm-rag
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.rag
     env_file:
       - .env
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./db:/app/db
-      - ./docs:/app/docs
+    build:
+      context: .
+      dockerfile: Dockerfile.rag
     restart: unless-stopped
 
   ui:
@@ -19,9 +14,7 @@ services:
     container_name: ucsm-ui
     build:
       context: .
-      dockerfile: docker/Dockerfile.ui
+      dockerfile: Dockerfile.ui
     depends_on:
       - rag
-    ports:
-      - "8501:8501"
     restart: unless-stopped

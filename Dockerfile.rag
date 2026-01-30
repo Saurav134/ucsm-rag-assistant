@@ -1,0 +1,28 @@
+FROM python:3.10-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy backend requirements
+COPY requirements.backend.txt .
+
+# Install python dependencies
+RUN pip install -r requirements.backend.txt
+
+# Copy documents
+COPY docs ./docs
+
+# Copy backend service
+COPY rag_service ./rag_service
+
+# Create persistent folders
+RUN mkdir -p /app/db /app/logs
+
+# Make start script executable
+RUN chmod +x rag_service/start.sh
+
+# Expose FastAPI port
+EXPOSE 7860
+
+# Start service
+CMD ["bash", "rag_service/start.sh"]
